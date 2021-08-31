@@ -1,7 +1,7 @@
-import React from 'react'
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
-import Colors from '../Config/Colors'
-import DefaultCodes from '../Config/DefaultCodes'
+import React from 'react';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import Colors from '../Config/Colors';
+
 
 export default function HomeScreen() {
     return (
@@ -31,7 +31,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: DefaultCodes.marginTopForContainer,
+        marginTop: StatusBar.currentHeight,
         paddingHorizontal: 10,
     },
     dateContainer: {

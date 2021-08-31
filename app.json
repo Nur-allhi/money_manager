@@ -4,9 +4,9 @@
     "slug": "money_manager",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./App/assets/Default/icon.png",
+    "icon": "./App/assets/Default/logo-icon.png",
     "splash": {
-      "image": "./App/assets/Default/splash.png",
+      "image": "./App/assets/Default/logo-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./App/assets/Default/adaptive-icon.png",
+        "foregroundImage": "./App/assets/Default/logo-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./App/assets/Default/favicon.png"
+      "favicon": "./App/assets/Default/logo-icon.png"
     }
   }
 }

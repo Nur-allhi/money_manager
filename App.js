@@ -1,9 +1,14 @@
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import HomeScreen from './App/Screens/HomeScreen';
+import DrawerNavigation from './App/Routes/DrawerNavigation';
 
 export default function App() {
+
   return (
-    <HomeScreen />
+    
+    <NavigationContainer>
+      <DrawerNavigation />
+    </NavigationContainer>
   );
 }
 
