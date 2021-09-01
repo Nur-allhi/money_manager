@@ -11,3 +11,9 @@
 
 -Drawer added form homescreen.
 -Income page added.
+
+> Chnagelog: V-0.0.3:
+
+- Pages added.
+- Homestack navigation added.
+- Modal added.

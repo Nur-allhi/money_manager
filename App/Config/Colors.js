@@ -7,7 +7,8 @@ const notPink = "#FD6F96"
 export default {
     // Homescreen:
     dateText: notPink,
-    cashTitle: violet,
-    cashAmount: violet,
+    cashTitle: white,
+    cashAmount: white,
+    catagoryHeading:violet,
 
 }
