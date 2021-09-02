@@ -17,3 +17,8 @@
 - Pages added.
 - Homestack navigation added.
 - Modal added.
+
+> Chnagelog: V-0.0.4:
+
+- modal added to add Transaction and Sub catagory.
+- code need refactoring.
