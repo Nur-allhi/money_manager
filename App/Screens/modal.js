@@ -54,17 +54,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContianer: {
-        // width: '70%',
+        width:"80%",
+        height:"40%",
         backgroundColor: 'white',
         paddingHorizontal: 20,
         paddingVertical: 20,
         borderRadius: 20,
         elevation: 20,
-    },
-    headerBtn: {
-        width: '100%',
-        height: 20,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
     },
 })

@@ -6,8 +6,7 @@ const IncomeCatagories = ({ item }) => {
     const { modal, setModal } = useContext(AppContext)
 
     return (
-        <TouchableOpacity onPress={() => setModal(true)}
-            style={styles.container} >
+        <TouchableOpacity style={styles.container} >
             <Text style={styles.text}>{item}</Text>
         </TouchableOpacity >
     )

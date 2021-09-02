@@ -22,3 +22,8 @@
 
 - modal added to add Transaction and Sub catagory.
 - code need refactoring.
+
+> Chnagelog: V-0.0.5:
+
+- Login and reg form added.
+- Password validation check added.
