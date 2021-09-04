@@ -14,10 +14,8 @@ const AppContextProvider = ({ children }) => {
                 modal,
                 setModal
             }}>
-
                 {children}
             </AppContext.Provider>
-
         </>
     )
 }

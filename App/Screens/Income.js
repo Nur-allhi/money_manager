@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { Alert, Button, FlatList, Keyboard, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Keyboard, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { AppContext } from './../Context/AppContext';
-import IncomeCatagories from './IncomeCatagories';
 import ModalForUser from './modal';
 
 const Income = () => {
@@ -9,9 +9,40 @@ const Income = () => {
     const [newCatagory, setNewCatagory] = useState("")
     const [subCatagories, setSubCatagories] = useState("")
 
-    const [addCatagoryModalactive, setAddCatagoryModalactive] = useState(false)
-    const [addTrasactionModalActive, setAddTrasactionModalActive] = useState(false)
+    const [transactioninput, setTransactionInput] = useState({
+        amount: "",
+        catagory: "",
+    })
 
+    const [catagoryModalActive, setCatagoryModalActive] = useState(false)
+    const [trasactionModalActive, setTrasactionModalActive] = useState(false)
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([
+        { label: 'Efty', value: 'efty' },
+        { label: 'namira', value: 'namira' },
+        { label: 'Apple', value: 'apple' },
+        { label: 'Banana', value: 'banana' },
+        { label: 'Mahib', value: 'mahib' },
+        { label: 'Arpa', value: 'arpa' },
+        { label: 'Fariha', value: 'fariha' },
+        { label: 'Dorin', value: 'dorin' },
+
+    ]);
+
+    console.log("Selected catagory", value)
+
+    function formatAMPM(date) {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        const strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
     const addSubCatagory = () => {
         if (newCatagory == "") {
             Alert.alert("Blank Input", "Please write something")
@@ -23,34 +54,43 @@ const Income = () => {
     }
 
     const addCatagory = () => {
-        setAddCatagoryModalactive(true)
+        setCatagoryModalActive(true)
         setModal(true)
-
-
     }
     const SubCatagoryAddbuttonFunction = () => {
         addSubCatagory()
         setModal(false);
-        setAddCatagoryModalactive(false);
+        setCatagoryModalActive(false);
     }
-
-
 
     const transactionAddButtonFunction = () => {
-        setModal(false)
-        setAddTrasactionModalActive(false)
-    }
+        if (transactioninput == "") {
+            Alert.alert("Blank Input", "Please fill this reg form")
+        } else {
+            const newEntry = {
+                id: Math.random(),
+                date: new Date(),
+                time: formatAMPM(new Date),
+                amount: parseFloat(transactioninput.amount),
+                catagory: value,
+            }
+            console.log(newEntry)
+            setTransactionInput("")
+            setValue("")
+            setModal(false)
+            setTrasactionModalActive(false)
+        }
 
+    }
     const addTranactionBtn = () => {
-        setAddTrasactionModalActive(true);
+        setTrasactionModalActive(true);
         setModal(true)
 
     }
-
     const cancelModal = () => {
         setModal(false),
-            setAddCatagoryModalactive(false);
-        setAddTrasactionModalActive(false)
+            setCatagoryModalActive(false);
+        setTrasactionModalActive(false)
     }
 
     console.log(subCatagories)
@@ -60,46 +100,30 @@ const Income = () => {
                 Income
             </Text>
 
-            {/* Add buttons */}
-            <View style={{ marginTop: 10, width: "40%" }}>
-                <Button
-                    onPress={() => addCatagory()}
-                    title="Add catagory"
-                    color="#262A53"
-                />
-            </View>
-            <View style={{ marginTop: 10, width: "40%", }}>
-                <Button
-                    title="Add transaction"
-                    color="#38A3A5"
-                    onPress={() => addTranactionBtn()}
-                />
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.addCatagoryBtn}>
+                    <Text style={{ color: "#fff", textAlign: "center" }} onPress={() => addCatagory()}>Add Catagory</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.addTransactionBtn}>
+                    <Text style={{ color: "#fff", textAlign: "center", }} onPress={() => addTranactionBtn()}>Add Transaction</Text>
+                </TouchableOpacity>
             </View>
 
-            {/* Sub catagories */}
-            {
-                subCatagories ? <View>
-                    <FlatList
-                        style={styles.catagoryList}
-                        horizontal={true}
-                        data={subCatagories}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) =>
-                            <IncomeCatagories item={item} />
-                        }
-                    />
-                </View> : null
-            }
+            <View style={{ marginTop: 40 }}>
+                <Text style={{ textAlign: "center", fontSize: 20 }}>You have selected {value} as catagory </Text>
+            </View>
 
-
-            {/* Add sub catagory Modal */}
-            {addCatagoryModalactive ? <ModalForUser>
-                <Button
-                    onPress={() => cancelModal()}
-                    title="Cancel modal"
-                    color="red"
-                    accessibilityLabel="Learn more about this purple button"
-                />
+            {catagoryModalActive ? <ModalForUser>
+                <View style={styles.headerBtn}>
+                    <TouchableOpacity onPress={() => cancelModal()}>
+                        <Image
+                            source={require("../assets/icons/modal/x.png")}
+                            style={{ height: 30, width: 30 }}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <Text style={{ textAlign: "center" }}>Add Sub catagory</Text>
                 <KeyboardAvoidingView>
                     <View style={styles.addmoreCatagoryWrapper}>
@@ -120,23 +144,58 @@ const Income = () => {
                 </KeyboardAvoidingView>
             </ModalForUser> : null}
 
-            {/* Add transaction Modal */}
-            {addTrasactionModalActive ? <ModalForUser>
-                <Button
-                    onPress={() => cancelModal()}
-                    title="Cancel modal"
-                    color="red"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-                <Text style={{ textAlign: "center" }}>Add new Transaction</Text>
 
-                <View style={styles.addTransactionContainer}>
+            {trasactionModalActive ? <ModalForUser>
+                <View style={styles.headerBtn}>
+                    <TouchableOpacity onPress={() => cancelModal()}>
+                        <Image
+                            source={require("../assets/icons/modal/x.png")}
+                            style={{ height: 30, width: 30 }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <Text style={{ textAlign: "center", fontSize: 20 }}>New Transaction</Text>
+
+                <View style={styles.transactionAddForm}>
                     <TextInput
-                        style={styles.addTransactionInput}
+                        style={styles.transactionInput}
                         placeholder="Amount"
+                        onChangeText={text => setTransactionInput({ ...transactioninput, amount: text })}
                     />
-                    <TouchableOpacity onPress={() => transactionAddButtonFunction()} style={styles.addTransactionBtn}>
-                        <Text style={styles.addTransactionBtnText}>
+                    <DropDownPicker
+                        style={{
+                            borderColor: 0,
+                            backgroundColor: "#FFF8E5",
+                            padding: 5,
+                        }}
+                        containerStyle={{
+                            marginTop: 10,
+                            height: 60,
+                        }}
+                        dropDownContainerStyle={{
+                            borderColor: 0,
+                            backgroundColor: "#E8F6EF",
+                            height: 150,
+                        }}
+                        scrollViewProps={{
+                            decelerationRate: "fast",
+                            indicatorStyle: "white",
+                        }}
+                        listMode="SCROLLVIEW"
+                        dropDownDirection="TOP"
+                        closeAfterSelecting={true}
+                        placeholder="Select catagory"
+                        open={open}
+                        value={value}
+                        items={items}
+                        setOpen={setOpen}
+                        setValue={setValue}
+                        setItems={setItems}
+                    />
+                    <TouchableOpacity
+                        onPress={() => transactionAddButtonFunction()}
+                        style={styles.tarnsactionSubmitbtn}>
+                        <Text style={styles.tarnsactionSubmitbtnText}>
                             Save
                         </Text>
                     </TouchableOpacity>
@@ -161,14 +220,31 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 20,
         fontWeight: "800"
-
     },
-    catagoryList: {
+    buttonContainer: {
+        marginTop: 10,
         flexDirection: "row",
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        backgroundColor: "#FFE3E3",
+        justifyContent: "space-around",
+    },
+    addCatagoryBtn: {
+        backgroundColor: "#345B63",
+        width: 150,
         height: 40,
+        justifyContent: "center",
+        borderRadius: 5
+    },
+    addTransactionBtn: {
+        backgroundColor: "#00A19D",
+        width: 150,
+        height: 40,
+        justifyContent: "center",
+        borderRadius: 5
+    },
+    headerBtn: {
+        width: '100%',
+        height: 20,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
     },
     addmoreCatagoryWrapper: {
         alignItems: "center",
@@ -196,20 +272,21 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 15,
     },
-    addTransactionContainer: {
+    transactionAddForm: {
+        marginTop: 10,
 
     },
-    addTransactionInput: {
+    transactionInput: {
         marginTop: 10,
         backgroundColor: "#EEEEEE",
         width: "100%",
-        height: 50,
+        height: 60,
         padding: 10,
-        fontSize: 15,
+        fontSize: 18,
         borderRadius: 10,
     },
-    addTransactionBtn: {
-        marginTop: 10,
+    tarnsactionSubmitbtn: {
+        marginTop: 20,
         backgroundColor: "#262A53",
         height: 40,
         borderRadius: 5,
@@ -217,7 +294,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
-    addTransactionBtnText: {
+    tarnsactionSubmitbtnText: {
         color: "white",
         fontSize: 15,
     },

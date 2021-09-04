@@ -5,7 +5,7 @@ import { AppContext } from './../Context/AppContext';
 
 
 
-export default function ModalForUser({children}) {
+export default function ModalForUser({ children }) {
     const { modal, setModal } = useContext(AppContext)
     const [showModal, setShowModal] = useState(modal)
 
@@ -39,7 +39,7 @@ export default function ModalForUser({children}) {
         <Modal transparent visible={showModal}>
             <View style={styles.modalBackGround}>
                 <Animated.View style={[styles.modalContianer, { transform: [{ scale: scaleValue }] }]}>
-                   {children }
+                    {children}
                 </Animated.View>
             </View>
         </Modal>
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContianer: {
-        width:"80%",
-        height:"40%",
+        width: "80%",
         backgroundColor: 'white',
         paddingHorizontal: 20,
         paddingVertical: 20,

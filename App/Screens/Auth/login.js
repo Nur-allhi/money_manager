@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { AppContext } from '../../Context/AppContext';
 
 
 const login = () => {
+    const { setLoggedInUser } = useContext(AppContext)
+    const [checkAuthDetails, setCheckAuthDetails] = useState(false)
     const [newUser, setNewUser] = useState(false)
     const [oldUserInput, setOldUserInput] = useState({
         email: '',
@@ -19,11 +22,18 @@ const login = () => {
     const oldUserLogin = () => {
         if (oldUserInput == "") {
             Alert.alert("Blank Input", "Please fill this login form")
+        } if (oldUserInput.email === "noorefty1@gmail.com") {
+            if (oldUserInput.password === "efty1234") {
+                console.log(oldUserInput)
+                setOldUserInput("")
+                setLoggedInUser(true)
+            } else {
+                console.log("Wrong password")
+            }
         } else {
-            console.log(oldUserInput)
-            setOldUserInput("")
+            console.log("Email and password is incorrect. Please try again")
+            setCheckAuthDetails(true);
         }
-
     }
 
     const newUserLogin = () => {
@@ -51,9 +61,11 @@ const login = () => {
                 Login
             </Text>
             }
+
             {
                 newUser
                     ?
+                    // New user signup
                     <View style={styles.RegForm}>
                         <TextInput
                             style={styles.inputs}
@@ -75,7 +87,7 @@ const login = () => {
                             value={newUserInput.password}
                         />
                         {
-                            passwordDidMatch ? null : <Text style={{color:"red"}}>Your password didnot match</Text>
+                            passwordDidMatch ? null : <Text style={{ color: "red" }}>Your password didnot match</Text>
                         }
                         <TextInput
                             secureTextEntry={true}
@@ -94,6 +106,7 @@ const login = () => {
                         </TouchableOpacity>
                     </View>
                     :
+                    // Login page
                     <View style={styles.loginForm}>
                         <TextInput
                             style={styles.inputs}
@@ -110,12 +123,17 @@ const login = () => {
 
 
                         />
-                        <TouchableOpacity style={styles.loginBtn} onPress={oldUserLogin}>
+                        {
+                            checkAuthDetails ? <Text style={{textAlign:"center"}}>Email and password {"\n"} is incorrect. Please try again</Text> : null
+                        }
+                        <TouchableOpacity style={styles.loginBtn}
+                            onPress={oldUserLogin}>
                             <Text style={styles.loginBtnText}>
                                 Login
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.toggleFormBtn} onPress={() => !setNewUser(true)}>
+                        <TouchableOpacity style={styles.toggleFormBtn}
+                            onPress={() => !setNewUser(true)}>
                             <Text style={styles.toggleFormBtnText}>You have no account ? Sign up here</Text>
                         </TouchableOpacity>
                     </View>

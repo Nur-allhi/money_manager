@@ -27,3 +27,9 @@
 
 - Login and reg form added.
 - Password validation check added.
+
+> Chnagelog: V-0.0.6:
+
+- Login secure with hardcoded data.
+- catagory section added.
+- dropdown maneu selection added
