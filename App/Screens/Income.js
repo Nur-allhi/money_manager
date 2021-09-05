@@ -1,37 +1,39 @@
-import React, { useContext, useState } from 'react';
-import { Alert, Image, Keyboard, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, FlatList, Image, Keyboard, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Collapsible from 'react-native-collapsible';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { AppContext } from './../Context/AppContext';
 import ModalForUser from './modal';
+import TransactionList from './TransactionList';
+
+
 
 const Income = () => {
-    const { modal, setModal } = useContext(AppContext)
-    const [newCatagory, setNewCatagory] = useState("")
-    const [subCatagories, setSubCatagories] = useState("")
+    const [isCollapsed, setIsCollapsed] = useState(false)
+    const { setModal } = useContext(AppContext)
+    const [catagoryModalActive, setCatagoryModalActive] = useState(false)
+    const [trasactionModalActive, setTrasactionModalActive] = useState(false)
 
+    const [subCatagories, setSubCatagories] = useState("")
+    const [transactions, setTransactions] = useState([])
+
+    const [catagoryInput, setCatagoryInput] = useState("")
     const [transactioninput, setTransactionInput] = useState({
         amount: "",
         catagory: "",
     })
 
-    const [catagoryModalActive, setCatagoryModalActive] = useState(false)
-    const [trasactionModalActive, setTrasactionModalActive] = useState(false)
-
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        { label: 'Efty', value: 'efty' },
-        { label: 'namira', value: 'namira' },
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' },
-        { label: 'Mahib', value: 'mahib' },
-        { label: 'Arpa', value: 'arpa' },
-        { label: 'Fariha', value: 'fariha' },
-        { label: 'Dorin', value: 'dorin' },
 
-    ]);
+    useEffect(() => {
+        saveIncomeDataToDevice(transactions);
+    }, [transactions])
 
-    console.log("Selected catagory", value)
+    useEffect(() => {
+        getIncomeDataFromDevice();
+    }, [])
 
     function formatAMPM(date) {
         let hours = date.getHours();
@@ -43,25 +45,6 @@ const Income = () => {
         const strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
     }
-    const addSubCatagory = () => {
-        if (newCatagory == "") {
-            Alert.alert("Blank Input", "Please write something")
-        } else {
-            Keyboard.dismiss();
-            setSubCatagories([...subCatagories, newCatagory])
-            setNewCatagory("")
-        }
-    }
-
-    const addCatagory = () => {
-        setCatagoryModalActive(true)
-        setModal(true)
-    }
-    const SubCatagoryAddbuttonFunction = () => {
-        addSubCatagory()
-        setModal(false);
-        setCatagoryModalActive(false);
-    }
 
     const transactionAddButtonFunction = () => {
         if (transactioninput == "") {
@@ -69,12 +52,12 @@ const Income = () => {
         } else {
             const newEntry = {
                 id: Math.random(),
-                date: new Date(),
+                entryDate: new Date(),
                 time: formatAMPM(new Date),
                 amount: parseFloat(transactioninput.amount),
                 catagory: value,
             }
-            console.log(newEntry)
+            setTransactions([...transactions, newEntry])
             setTransactionInput("")
             setValue("")
             setModal(false)
@@ -82,18 +65,64 @@ const Income = () => {
         }
 
     }
+
+    const SubCatagoryAddbuttonFunction = () => {
+        if (catagoryInput == "") {
+            Alert.alert("Blank Input", "Please write something")
+        } else {
+            const newCatagory = {
+                label: catagoryInput.toUpperCase(), value: catagoryInput.toLowerCase()
+            }
+            Keyboard.dismiss();
+            setSubCatagories([...subCatagories, newCatagory])
+            setCatagoryInput("")
+            setModal(false);
+            setCatagoryModalActive(false);
+        }
+    }
+    const cancelModal = () => {
+        setModal(false)
+        setCatagoryModalActive(false)
+        setTrasactionModalActive(false)
+    }
     const addTranactionBtn = () => {
         setTrasactionModalActive(true);
         setModal(true)
-
     }
-    const cancelModal = () => {
-        setModal(false),
-            setCatagoryModalActive(false);
-        setTrasactionModalActive(false)
+    const addCatagory = () => {
+        setCatagoryModalActive(true)
+        setModal(true)
     }
 
-    console.log(subCatagories)
+
+    // Store to device:
+    const saveIncomeDataToDevice = async (transactions) => {
+        try {
+            const stringyfyData = JSON.stringify(transactions)
+            if (stringyfyData != null) {
+                await AsyncStorage.setItem("IncomeData", stringyfyData)
+                console.log("successfully stored the data")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // Get stored data:
+    const getIncomeDataFromDevice = async () => {
+        try {
+            const incomes = await AsyncStorage.getItem("IncomeData");
+            if (incomes != null) {
+                setTransactions(JSON.parse(incomes))
+                console.log("got the data")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    console.log("data",transactions)
+
     return (
         <View style={styles.container}>
             <Text style={styles.pageTitle}>
@@ -124,24 +153,24 @@ const Income = () => {
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ textAlign: "center" }}>Add Sub catagory</Text>
-                <KeyboardAvoidingView>
-                    <View style={styles.addmoreCatagoryWrapper}>
-                        <TextInput
-                            style={styles.newSubCatagoryInput}
-                            placeholder="Add more sub catagory"
-                            placeholderTextColor="#787A91"
-                            onChangeText={text => setNewCatagory(text)}
-                            value={newCatagory}
-                        />
-                        <TouchableOpacity style={styles.subCatagoryAddBtn}
-                            onPress={() => SubCatagoryAddbuttonFunction()}>
-                            <Text style={styles.subCatagoryAddBtnText}>
-                                Save
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
+                <Text style={{ textAlign: "center", fontSize: 20 }}>Add Sub catagory</Text>
+
+                <View style={styles.addSubCatagoryWrapper}>
+                    <TextInput
+                        style={styles.subCatagoryInput}
+                        placeholder="Add Catagory"
+                        placeholderTextColor="#787A91"
+                        onChangeText={text => setCatagoryInput(text)}
+                        value={catagoryInput}
+                    />
+                    <TouchableOpacity style={styles.subCatagoryAddBtn}
+                        onPress={() => SubCatagoryAddbuttonFunction()}>
+                        <Text style={styles.subCatagoryAddBtnText}>
+                            Save
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
             </ModalForUser> : null}
 
 
@@ -187,10 +216,10 @@ const Income = () => {
                         placeholder="Select catagory"
                         open={open}
                         value={value}
-                        items={items}
+                        items={subCatagories}
                         setOpen={setOpen}
                         setValue={setValue}
-                        setItems={setItems}
+                        setItems={setSubCatagories}
                     />
                     <TouchableOpacity
                         onPress={() => transactionAddButtonFunction()}
@@ -201,6 +230,37 @@ const Income = () => {
                     </TouchableOpacity>
                 </View>
             </ModalForUser> : null}
+
+
+            <View>
+                <TouchableOpacity
+                    onPress={() => setIsCollapsed(!isCollapsed)}
+                    style={styles.tarnsactionSubmitbtn}>
+                    <Text style={styles.tarnsactionSubmitbtnText}>
+                        OPEN
+                    </Text>
+                </TouchableOpacity>
+                <View>
+                    <Collapsible collapsed={isCollapsed}>
+                        <FlatList
+                            data={transactions}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) =>
+                                <TransactionList
+                                    amount={item.amount}
+                                    catagory={item.catagory}
+                                    entryDate={item.entryDate}
+                                    id={item.id}
+                                    time={item.time}
+                                />
+                            }
+                        />
+                    </Collapsible>
+                </View>
+
+
+            </View>
+
 
         </View>
 
@@ -246,25 +306,26 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'center',
     },
-    addmoreCatagoryWrapper: {
+    addSubCatagoryWrapper: {
         alignItems: "center",
         marginBottom: 10,
+        marginTop: 10,
     },
-    newSubCatagoryInput: {
+    subCatagoryInput: {
         marginTop: 10,
         backgroundColor: "#EEEEEE",
-        width: "100%",
-        height: 40,
+        width: "70%",
+        height: 70,
         padding: 10,
-        fontSize: 15,
+        fontSize: 18,
         borderRadius: 10,
     },
     subCatagoryAddBtn: {
         marginTop: 10,
-        backgroundColor: "#262A53",
+        backgroundColor: "#57CC99",
         height: 40,
         borderRadius: 5,
-        width: "100%",
+        width: "70%",
         alignItems: "center",
         justifyContent: "center"
     },
@@ -287,7 +348,7 @@ const styles = StyleSheet.create({
     },
     tarnsactionSubmitbtn: {
         marginTop: 20,
-        backgroundColor: "#262A53",
+        backgroundColor: "#E05D5D",
         height: 40,
         borderRadius: 5,
         width: "100%",

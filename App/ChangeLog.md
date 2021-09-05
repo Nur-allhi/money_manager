@@ -33,3 +33,8 @@
 - Login secure with hardcoded data.
 - catagory section added.
 - dropdown maneu selection added
+
+> Chnagelog: V-0.0.7:
+
+- catagory can be created by user
+- transaction data can be add
