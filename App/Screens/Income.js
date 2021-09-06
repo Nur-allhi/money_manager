@@ -5,7 +5,7 @@ import {
     StatusBar, StyleSheet, Text, TextInput,
     TouchableOpacity, View
 } from 'react-native';
-// import Collapsible from 'react-native-collapsible';
+import Collapsible from 'react-native-collapsible';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { AppContext } from './../Context/AppContext';
 import ModalForUser from './modal';
@@ -24,7 +24,6 @@ const Income = () => {
     useEffect(() => {
         if (transactions.length > 0) {
             saveIncomeDataToDevice(transactions);
-            console.log("Yes called")
         }
     }, [transactions])
 
@@ -179,10 +178,6 @@ const Income = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ marginTop: 40 }}>
-                <Text style={{ textAlign: "center", fontSize: 20 }}>You have selected {value} as catagory </Text>
-            </View>
-
             {catagoryModalActive ? <ModalForUser>
                 <View style={styles.headerBtn}>
                     <TouchableOpacity onPress={() => cancelModal()}>
@@ -239,7 +234,7 @@ const Income = () => {
                         containerStyle={{
                             marginTop: 10,
                             height: 60,
-                            width: 300,
+                            width: 200,
                         }}
                         dropDownContainerStyle={{
                             borderColor: 0,
@@ -272,16 +267,17 @@ const Income = () => {
             </ModalForUser> : null}
 
 
-            {/* <View>
+            <View>
                 <TouchableOpacity
                     onPress={() => setIsCollapsed(!isCollapsed)}
-                    style={styles.tarnsactionSubmitbtn}>
-                    <Text style={styles.tarnsactionSubmitbtnText}>
-                        OPEN
+                    style={styles.seeTransaction}>
+                    <Text style={styles.seeTransactionText}>
+                        See Income Data
                     </Text>
                 </TouchableOpacity>
                 <View>
                     <Collapsible collapsed={isCollapsed}>
+                        <Text style={{ textAlign: "center" }}>Here is your data</Text>
                         <FlatList
                             data={transactions}
                             keyExtractor={(item, index) => index.toString()}
@@ -296,27 +292,8 @@ const Income = () => {
                             }
                         />
                     </Collapsible>
-                </View> 
-            </View>*/}
-
-            <View>
-                <Text>Here is your data</Text>
-                <FlatList
-                    data={transactions}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) =>
-                        <TransactionList
-                            amount={item.amount}
-                            catagory={item.catagory}
-                            entryDate={item.entryDate}
-                            id={item.id}
-                            time={item.time}
-                        />
-                    }
-                />
+                </View>
             </View>
-
-
         </View>
 
     )
@@ -356,7 +333,6 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     headerBtn: {
-        width: '100%',
         height: 20,
         alignItems: 'flex-end',
         justifyContent: 'center',
@@ -370,7 +346,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         backgroundColor: "#EEEEEE",
         width: 200,
-        height: 70,
+        height: 50,
         padding: 10,
         fontSize: 18,
         borderRadius: 10,
@@ -406,12 +382,23 @@ const styles = StyleSheet.create({
         backgroundColor: "#E05D5D",
         height: 40,
         borderRadius: 5,
-        width: 300,
         alignItems: "center",
         justifyContent: "center"
     },
     tarnsactionSubmitbtnText: {
         color: "white",
         fontSize: 15,
+    },
+    seeTransaction: {
+        marginTop: 20,
+        backgroundColor: "#6B7AA1",
+        height: 40,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    seeTransactionText: {
+        color: "white",
+        fontSize: 18,
     },
 })

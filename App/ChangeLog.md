@@ -42,3 +42,7 @@
 > Chnagelog: V-0.0.8:
 
 - catagory and income transaction canbe store in device.
+
+> Chnagelog: V-0.0.9:
+
+- little code changes.
