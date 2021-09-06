@@ -1,7 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, FlatList, Image, Keyboard, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Collapsible from 'react-native-collapsible';
+import {
+    Alert, FlatList, Image, Keyboard,
+    StatusBar, StyleSheet, Text, TextInput,
+    TouchableOpacity, View
+} from 'react-native';
+// import Collapsible from 'react-native-collapsible';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { AppContext } from './../Context/AppContext';
 import ModalForUser from './modal';
@@ -11,12 +15,33 @@ import TransactionList from './TransactionList';
 
 const Income = () => {
     const [isCollapsed, setIsCollapsed] = useState(false)
-    const { setModal } = useContext(AppContext)
+    const { setModal, transactions, setTransactions,
+        incomeSubCatagories, setIncomeSubCatagories, } = useContext(AppContext)
     const [catagoryModalActive, setCatagoryModalActive] = useState(false)
     const [trasactionModalActive, setTrasactionModalActive] = useState(false)
 
-    const [subCatagories, setSubCatagories] = useState("")
-    const [transactions, setTransactions] = useState([])
+
+    useEffect(() => {
+        if (transactions.length > 0) {
+            saveIncomeDataToDevice(transactions);
+            console.log("Yes called")
+        }
+    }, [transactions])
+
+    useEffect(() => {
+        getIncomeDataFromDevice();
+    }, [])
+
+    useEffect(() => {
+        if (incomeSubCatagories.length > 0) {
+            saveIncomeSubCatagoriesToDevice(incomeSubCatagories);
+        }
+    }, [incomeSubCatagories])
+
+    useEffect(() => {
+        getIncomeSubCatagoriesFromDevice();
+    }, [])
+
 
     const [catagoryInput, setCatagoryInput] = useState("")
     const [transactioninput, setTransactionInput] = useState({
@@ -27,13 +52,7 @@ const Income = () => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
 
-    useEffect(() => {
-        saveIncomeDataToDevice(transactions);
-    }, [transactions])
 
-    useEffect(() => {
-        getIncomeDataFromDevice();
-    }, [])
 
     function formatAMPM(date) {
         let hours = date.getHours();
@@ -74,7 +93,7 @@ const Income = () => {
                 label: catagoryInput.toUpperCase(), value: catagoryInput.toLowerCase()
             }
             Keyboard.dismiss();
-            setSubCatagories([...subCatagories, newCatagory])
+            setIncomeSubCatagories([...incomeSubCatagories, newCatagory])
             setCatagoryInput("")
             setModal(false);
             setCatagoryModalActive(false);
@@ -92,16 +111,28 @@ const Income = () => {
     const addCatagory = () => {
         setCatagoryModalActive(true)
         setModal(true)
-    }
 
+    }
 
     // Store to device:
     const saveIncomeDataToDevice = async (transactions) => {
         try {
+
             const stringyfyData = JSON.stringify(transactions)
+
             if (stringyfyData != null) {
                 await AsyncStorage.setItem("IncomeData", stringyfyData)
-                console.log("successfully stored the data")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const saveIncomeSubCatagoriesToDevice = async (incomeSubCatagories) => {
+        try {
+            const stringyfyData = JSON.stringify(incomeSubCatagories)
+            if (stringyfyData != null) {
+                await AsyncStorage.setItem("IncomeSubCatagories", stringyfyData)
             }
         } catch (error) {
             console.log(error)
@@ -114,14 +145,22 @@ const Income = () => {
             const incomes = await AsyncStorage.getItem("IncomeData");
             if (incomes != null) {
                 setTransactions(JSON.parse(incomes))
-                console.log("got the data")
             }
         } catch (error) {
             console.log(error)
         }
     }
 
-    console.log("data",transactions)
+    const getIncomeSubCatagoriesFromDevice = async () => {
+        try {
+            const incomeSubCatagories = await AsyncStorage.getItem("IncomeSubCatagories")
+            if (incomeSubCatagories != null) {
+                setIncomeSubCatagories(JSON.parse(incomeSubCatagories))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -200,6 +239,7 @@ const Income = () => {
                         containerStyle={{
                             marginTop: 10,
                             height: 60,
+                            width: 300,
                         }}
                         dropDownContainerStyle={{
                             borderColor: 0,
@@ -216,10 +256,10 @@ const Income = () => {
                         placeholder="Select catagory"
                         open={open}
                         value={value}
-                        items={subCatagories}
+                        items={incomeSubCatagories}
                         setOpen={setOpen}
                         setValue={setValue}
-                        setItems={setSubCatagories}
+                        setItems={setIncomeSubCatagories}
                     />
                     <TouchableOpacity
                         onPress={() => transactionAddButtonFunction()}
@@ -232,7 +272,7 @@ const Income = () => {
             </ModalForUser> : null}
 
 
-            <View>
+            {/* <View>
                 <TouchableOpacity
                     onPress={() => setIsCollapsed(!isCollapsed)}
                     style={styles.tarnsactionSubmitbtn}>
@@ -256,9 +296,24 @@ const Income = () => {
                             }
                         />
                     </Collapsible>
-                </View>
+                </View> 
+            </View>*/}
 
-
+            <View>
+                <Text>Here is your data</Text>
+                <FlatList
+                    data={transactions}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) =>
+                        <TransactionList
+                            amount={item.amount}
+                            catagory={item.catagory}
+                            entryDate={item.entryDate}
+                            id={item.id}
+                            time={item.time}
+                        />
+                    }
+                />
             </View>
 
 
@@ -314,7 +369,7 @@ const styles = StyleSheet.create({
     subCatagoryInput: {
         marginTop: 10,
         backgroundColor: "#EEEEEE",
-        width: "70%",
+        width: 200,
         height: 70,
         padding: 10,
         fontSize: 18,
@@ -325,7 +380,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#57CC99",
         height: 40,
         borderRadius: 5,
-        width: "70%",
+        width: 200,
         alignItems: "center",
         justifyContent: "center"
     },
@@ -340,7 +395,7 @@ const styles = StyleSheet.create({
     transactionInput: {
         marginTop: 10,
         backgroundColor: "#EEEEEE",
-        width: "100%",
+        width: 300,
         height: 60,
         padding: 10,
         fontSize: 18,
@@ -351,7 +406,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#E05D5D",
         height: 40,
         borderRadius: 5,
-        width: "100%",
+        width: 300,
         alignItems: "center",
         justifyContent: "center"
     },

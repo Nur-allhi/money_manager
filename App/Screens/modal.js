@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContianer: {
-        width: "80%",
+        // width: "95%",
         backgroundColor: 'white',
         paddingHorizontal: 20,
         paddingVertical: 20,

@@ -38,3 +38,7 @@
 
 - catagory can be created by user
 - transaction data can be add
+
+> Chnagelog: V-0.0.8:
+
+- catagory and income transaction canbe store in device.
