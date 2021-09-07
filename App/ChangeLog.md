@@ -46,3 +46,7 @@
 > Chnagelog: V-0.0.9:
 
 - little code changes.
+
+> Chnagelog: V-0.1.0:
+
+- income page redesigned.
