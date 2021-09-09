@@ -1,10 +1,11 @@
+import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { Alert, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AppContext } from '../../Context/AppContext';
 
 
 const login = () => {
-    const { setLoggedInUser } = useContext(AppContext)
+    const { loggedInUser, setLoggedInUser, userLogInfo, setUserLogInfo, } = useContext(AppContext)
     const [checkAuthDetails, setCheckAuthDetails] = useState(false)
     const [newUser, setNewUser] = useState(false)
     const [oldUserInput, setOldUserInput] = useState({
@@ -19,36 +20,33 @@ const login = () => {
     })
     const [passwordDidMatch, setPasswordDidMatch] = useState(true)
 
-    const oldUserLogin = () => {
-        if (oldUserInput == "") {
-            Alert.alert("Blank Input", "Please fill this login form")
-        } if (oldUserInput.email === "noorefty1@gmail.com") {
-            if (oldUserInput.password === "efty1234") {
-                console.log(oldUserInput)
-                setOldUserInput("")
-                setLoggedInUser(true)
-            } else {
-                console.log("Wrong password")
-            }
-        } else {
-            console.log("Email and password is incorrect. Please try again")
-            setCheckAuthDetails(true);
-        }
+    const oldUserLogin = async () => {
+        const userData = new FormData();
+        userData.append('email', oldUserInput.email);
+        userData.append('passwodText', oldUserInput.password);
+
+        axios.post("https://myaccount.accountingarif.com/api/v1/user/login", userData)
+            .then(res => {
+                // setUserLogInfo(res.data)
+                // console.log("login-page", res.data)
+                setLoggedInUser(res.data.success)
+            })
+            .catch(error => console.log("Error: ", error))
     }
 
     const newUserLogin = () => {
-        if (newUserInput == "") {
-            Alert.alert("Blank Input", "Please fill this reg form")
-        } if (newUserInput.password === newUserInput.confrimPassword) {
-            console.log(newUserInput)
-            console.log("yeaaaaa Its matched")
-            setPasswordDidMatch(true)
-            setNewUserInput("")
-        }
-        else {
-            setPasswordDidMatch(false)
-            console.log("Your password didnt match")
-        }
+        const newUserData = new FormData();
+        newUserData.append("email", newUserInput.email);
+        newUserData.append("passwodText", newUserInput.password);
+        newUserData.append("fullName", newUserInput.name);
+        newUserData.append("phone", "0181346789");
+        console.log(newUserData)
+
+        axios.post("https://myaccount.accountingarif.com/api/v1/user/registration", newUserData)
+            .then(res => {
+                console.log("server Response:", res)
+            })
+            .catch(error => console.log("Error:", error))
     }
 
 
@@ -124,7 +122,7 @@ const login = () => {
 
                         />
                         {
-                            checkAuthDetails ? <Text style={{textAlign:"center"}}>Email and password {"\n"} is incorrect. Please try again</Text> : null
+                            checkAuthDetails ? <Text style={{ textAlign: "center" }}>Email and password {"\n"} is incorrect. Please try again</Text> : null
                         }
                         <TouchableOpacity style={styles.loginBtn}
                             onPress={oldUserLogin}>

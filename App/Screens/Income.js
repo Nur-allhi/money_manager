@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Alert, FlatList, Image, Keyboard, StatusBar, StyleSheet, Text, TextInput,
@@ -19,6 +20,12 @@ const Income = () => {
     const [catagoryModalActive, setCatagoryModalActive] = useState(false)
 
     useEffect(() => {
+axios
+    }, [])
+
+
+    useEffect(() => {
+
         if (transactions.length > 0) {
             saveIncomeDataToDevice(transactions);
         }
@@ -31,6 +38,7 @@ const Income = () => {
     useEffect(() => {
         if (incomeSubCatagories.length > 0) {
             saveIncomeSubCatagoriesToDevice(incomeSubCatagories);
+
         }
     }, [incomeSubCatagories])
 
@@ -40,10 +48,7 @@ const Income = () => {
 
 
     const [catagoryInput, setCatagoryInput] = useState("")
-    const [transactioninput, setTransactionInput] = useState({
-        amount: "",
-        catagory: "",
-    })
+    const [transactioninput, setTransactionInput] = useState("")
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -62,7 +67,8 @@ const Income = () => {
     }
 
     const transactionAddButtonFunction = () => {
-        if (transactioninput.amount == "") {
+        const amount = transactioninput
+        if (amount == "") {
             Alert.alert("Blank Input", "Please write amount and select catagory")
         } else {
             const newEntry = {
@@ -108,7 +114,6 @@ const Income = () => {
     // Store to device:
     const saveIncomeDataToDevice = async (transactions) => {
         try {
-
             const stringyfyData = JSON.stringify(transactions)
 
             if (stringyfyData != null) {
@@ -168,38 +173,48 @@ const Income = () => {
                     <TextInput
                         style={styles.transactionInput}
                         placeholder="Amount"
+                        keyboardType="numeric"
                         onChangeText={text => setTransactionInput({ ...transactioninput, amount: text })}
                         value={transactioninput.amount}
                     />
                 </View>
                 <View style={styles.catagoryDropdownContainer}>
-                    {incomeSubCatagories ? <DropDownPicker
-                        style={{
+                    <View style={{ width: "45%" }}>
+                        {incomeSubCatagories ? <DropDownPicker
+                            style={{
+                                borderColor: 0,
+                                backgroundColor: "#EEEEEE",
+                            }}
+                            containerStyle={{
+                                height: 70,
+
+                            }}
+                            dropDownContainerStyle={{
+                                backgroundColor: "#EEEEEE",
+                                borderColor: "#345B63"
+                            }}
+                            scrollViewProps={{
+                                decelerationRate: "fast",
+                                indicatorStyle: "white",
+                            }}
+                            listMode="SCROLLVIEW"
+                            closeAfterSelecting={true}
+                            placeholder="Select catagory"
+                            open={open}
+                            value={value}
+                            items={incomeSubCatagories}
+                            setOpen={setOpen}
+                            setValue={setValue}
+                            setItems={setIncomeSubCatagories}
+                        /> : <View style={{
                             borderColor: 0,
-                            backgroundColor: "#EEEEEE",
-                        }}
-                        containerStyle={{
-                            height: 70,
-                            width: "45%",
-                        }}
-                        dropDownContainerStyle={{
-                            backgroundColor: "#EEEEEE",
-                            borderColor: "#345B63"
-                        }}
-                        scrollViewProps={{
-                            decelerationRate: "fast",
-                            indicatorStyle: "white",
-                        }}
-                        listMode="SCROLLVIEW"
-                        closeAfterSelecting={true}
-                        placeholder="Select catagory"
-                        open={open}
-                        value={value}
-                        items={incomeSubCatagories}
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setIncomeSubCatagories}
-                    /> : <Text>You hvae no catagory</Text>}
+                            alignItems: "center",
+                        }}>
+                            <Text style={{ textAlign: "center" }}>Add Catagory Here</Text>
+                        </View>
+                        }
+                    </View>
+
                     <TouchableOpacity style={styles.addCatagoryBtn}>
                         <Text style={{ color: "#000", textAlign: "center" }} onPress={() => addCatagory()}>Add Catagory</Text>
                     </TouchableOpacity>
@@ -260,7 +275,7 @@ const Income = () => {
                             style={{
                                 marginTop: 10,
                                 borderWidth: 1,
-                                borderRadius:10,
+                                borderRadius: 10,
                                 maxHeight: 445
                             }}
                             data={transactions}
@@ -305,6 +320,7 @@ const styles = StyleSheet.create({
     },
     transactionInput: {
         marginTop: 10,
+        marginBottom: 20,
         backgroundColor: "#EEEEEE",
         width: "90%",
         height: 60,
@@ -316,7 +332,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-
         marginTop: 10,
     },
     addCatagoryBtn: {

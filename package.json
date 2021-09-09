@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/drawer": "^5.12.9",
     "@react-navigation/native": "^5.9.8",
     "@react-navigation/stack": "^5.14.9",
+    "@types/react-native": "^0.64.14",
+    "axios": "^0.21.4",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",

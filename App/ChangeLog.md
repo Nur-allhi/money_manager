@@ -50,3 +50,8 @@
 > Chnagelog: V-0.1.0:
 
 - income page redesigned.
+
+> Chnagelog: V-0.1.1:
+
+- dropdown manu dynamacily generated.
+- checkbox implemented.

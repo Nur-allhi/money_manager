@@ -1,9 +1,29 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext, useEffect } from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Colors from '../Config/Colors';
+import { AppContext } from './../Context/AppContext';
 
 
 export default function HomeScreen({ navigation }) {
+    const {setUserLogInfo } = useContext(AppContext)
+
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
+
+    const getUserInfo = async () => {
+        try {
+            const userinfo = await AsyncStorage.getItem("User-Info")
+            if (userinfo != null) {
+                setUserLogInfo(userinfo)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <View style={styles.container}>
             <StatusBar
@@ -29,7 +49,7 @@ export default function HomeScreen({ navigation }) {
                     Your main catagories
                 </Text>
                 <View style={styles.catagoryIconContainer}>
-                    <TouchableOpacity style={styles.catagory} onPress={()=>navigation.push('Income')}>
+                    <TouchableOpacity style={styles.catagory} onPress={() => navigation.push('Income')}>
                         <View style={styles.catagoryIcon}>
                             <Image
                                 style={{ height: 45, width: 45 }}
@@ -42,7 +62,7 @@ export default function HomeScreen({ navigation }) {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.catagory} onPress={()=>navigation.push('Deposit')}>
+                    <TouchableOpacity style={styles.catagory} onPress={() => navigation.push('Deposit')}>
                         <View style={styles.catagoryIcon}>
                             <Image
                                 style={{ height: 45, width: 45 }}
@@ -55,7 +75,7 @@ export default function HomeScreen({ navigation }) {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.catagory} onPress={()=>navigation.push('Expense')}>
+                    <TouchableOpacity style={styles.catagory} onPress={() => navigation.push('Expense')}>
                         <View style={styles.catagoryIcon}>
                             <Image
                                 style={{ height: 45, width: 45 }}
@@ -68,7 +88,7 @@ export default function HomeScreen({ navigation }) {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.catagory} onPress={()=>navigation.push('Loan')}>
+                    <TouchableOpacity style={styles.catagory} onPress={() => navigation.push('Loan')}>
                         <View style={styles.catagoryIcon}>
                             <Image
                                 style={{ height: 45, width: 45 }}
