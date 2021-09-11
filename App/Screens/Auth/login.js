@@ -2,12 +2,18 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AppContext } from '../../Context/AppContext';
+import { AuthContext } from './../../Context/AuthContext';
 
 
 const login = () => {
-    const { loggedInUser, setLoggedInUser, userLogInfo, setUserLogInfo, } = useContext(AppContext)
+    const { setUserLogInInfo } = useContext(AppContext)
+    const { regestration, login } = useContext(AuthContext)
+
     const [checkAuthDetails, setCheckAuthDetails] = useState(false)
     const [newUser, setNewUser] = useState(false)
+    const [passwordDidMatch, setPasswordDidMatch] = useState(true)
+
+
     const [oldUserInput, setOldUserInput] = useState({
         email: '',
         password: '',
@@ -18,21 +24,23 @@ const login = () => {
         password: '',
         confrimPassword: ''
     })
-    const [passwordDidMatch, setPasswordDidMatch] = useState(true)
 
-    const oldUserLogin = async () => {
-        const userData = new FormData();
-        userData.append('email', oldUserInput.email);
-        userData.append('passwodText', oldUserInput.password);
-
-        axios.post("https://myaccount.accountingarif.com/api/v1/user/login", userData)
-            .then(res => {
-                // setUserLogInfo(res.data)
-                // console.log("login-page", res.data)
-                setLoggedInUser(res.data.success)
-            })
-            .catch(error => console.log("Error: ", error))
+    const handleLogin = (email, password) => {
+        login(email, password);
     }
+
+    // const oldUserLogin = async () => {
+    //     const userData = new FormData();
+    //     userData.append('email', oldUserInput.email);
+    //     userData.append('passwodText', oldUserInput.password);
+
+    //     axios.post("https://myaccount.accountingarif.com/api/v1/user/login", userData)
+    //         .then(res => {
+    //             // setUserLogInInfo(res.data)
+    //             console.log("Login infos :", res.data)
+    //         })
+    //         .catch(error => console.log("Error: ", error))
+    // }
 
     const newUserLogin = () => {
         const newUserData = new FormData();
@@ -44,7 +52,7 @@ const login = () => {
 
         axios.post("https://myaccount.accountingarif.com/api/v1/user/registration", newUserData)
             .then(res => {
-                console.log("server Response:", res)
+                console.log("Reg infos :", res.data)
             })
             .catch(error => console.log("Error:", error))
     }
@@ -125,7 +133,7 @@ const login = () => {
                             checkAuthDetails ? <Text style={{ textAlign: "center" }}>Email and password {"\n"} is incorrect. Please try again</Text> : null
                         }
                         <TouchableOpacity style={styles.loginBtn}
-                            onPress={oldUserLogin}>
+                            onPress={() => { handleLogin(oldUserInput.email, oldUserInput.password) }}>
                             <Text style={styles.loginBtnText}>
                                 Login
                             </Text>

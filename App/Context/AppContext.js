@@ -3,10 +3,14 @@ import React, { createContext, useState } from 'react';
 export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-    const [loggedInUser, setLoggedInUser] = useState(true)
-    const [userLogInfo, setUserLogInfo] = useState("")
+    const [loggedInUser, setLoggedInUser] = useState(false)
+    const [userLogInInfo, setUserLogInInfo] = useState(null)
     const [transactions, setTransactions] = useState([])
     const [incomeSubCatagories, setIncomeSubCatagories] = useState("")
+
+    const [parentCatagoryData, setParentCatagoryData] = useState([])
+    const [parentCatagory, setParentCatagory] = useState([])
+
 
 
 
@@ -16,9 +20,12 @@ const AppContextProvider = ({ children }) => {
         <>
             <AppContext.Provider value={{
                 loggedInUser, setLoggedInUser,
-                userLogInfo, setUserLogInfo,
+                userLogInInfo, setUserLogInInfo,
                 transactions, setTransactions,
                 incomeSubCatagories, setIncomeSubCatagories,
+                parentCatagoryData, setParentCatagoryData,
+                parentCatagory, setParentCatagory,
+
                 modal, setModal
             }}>
                 {children}

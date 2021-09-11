@@ -55,3 +55,7 @@
 
 - dropdown manu dynamacily generated.
 - checkbox implemented.
+
+> Chnagelog: V-0.1.2:
+
+- Authentication locally has fixed.

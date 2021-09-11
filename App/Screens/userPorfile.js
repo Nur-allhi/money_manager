@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppContext } from './../Context/AppContext';
+import { AuthContext } from './../Context/AuthContext';
 
 const UserPorfile = ({ navigation }) => {
-    const { setLoggedInUser, userLogInfo, setUserLogInfo } = useContext(AppContext)
-    // const { email, fullName, phone } = userLogInfo.data
+    // const { setUserLogInInfo } = useContext(AppContext)
+    const { logout } = useContext(AuthContext)
 
-    const logoutUser = () => {
-        setLoggedInUser(false)
-    }
+    const { setLoggedInUser, userLogInInfo, } = useContext(AppContext)
+
+    // const logoutUser = () => {
+    //     setLoggedInUser(false)
+    // }
 
     return (
         <View style={styles.conatiner}>
@@ -18,12 +21,12 @@ const UserPorfile = ({ navigation }) => {
                 translucent={true}
             />
             <View style={styles.details}>
-                {/* {userLogInfo.data ? <View>
-                    <Text>Email: {email}</Text>
-                    <Text>Name: {fullName}</Text>
-                    <Text>Phone: {phone}</Text>
-                </View> : null} */}
-                <TouchableOpacity onPress={() => logoutUser()} style={styles.logoutBtn}>
+                {userLogInInfo ? <View>
+                    <Text>Email: {userLogInInfo.email}</Text>
+                    <Text>Name: {userLogInInfo.fullName}</Text>
+                    <Text>Phone: {userLogInInfo.phone}</Text>
+                </View> : null}
+                <TouchableOpacity onPress={() => logout()} style={styles.logoutBtn}>
                     <Text style={styles.logoutBtnText}>
                         Logout
                     </Text>
