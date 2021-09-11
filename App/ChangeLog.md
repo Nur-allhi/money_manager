@@ -59,3 +59,7 @@
 > Chnagelog: V-0.1.2:
 
 - Authentication locally has fixed.
+
+> Chnagelog: V-0.1.3:
+
+- Authentication can be done from database.

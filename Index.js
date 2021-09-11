@@ -10,12 +10,11 @@ import DrawerNavigation from './App/Routes/DrawerNavigation';
 
 const Index = () => {
     const {
-        // userLogInInfo, setUserLogInInfo,
         parentCatagoryData, setParentCatagoryData,
         parentCatagory, setParentCatagory,
     } = useContext(AppContext)
 
-    // const [isLoading, setIsLoading] = useState(true)
+   
 
     const initialLoginState = {
         isLoading: true,
@@ -56,15 +55,24 @@ const Index = () => {
         login: async (email, password) => {
             let userToken;
             userToken = null;
-            if (email == "user" && password == "pass") {
-                try {
-                    userToken = "dgdg";
-                    await AsyncStorage.setItem("userToken", userToken)
-                } catch (error) {
-                    console.log("🚀 ~ file: Index.js ~ line 68 ~ login: ~ error", error)
-                }
-            }
-            dispatch({ type: "LOGIN",token: userToken })
+            const loginInputs = new FormData();
+            loginInputs.append('email', email);
+            loginInputs.append('passwodText', password);
+
+            await axios.post("https://myaccount.accountingarif.com/api/v1/user/login", loginInputs)
+                .then(res => {
+                    
+                    userToken = res.data.data.securityToken
+                    if (userToken != null) {
+                        try {
+                             AsyncStorage.setItem("userToken", userToken)
+                        } catch (error) {
+                            console.log("🚀 ~ file: Index.js ~ line 68 ~ login: ~ error", error)
+                        }
+                    }
+                    dispatch({ type: "LOGIN", token: userToken })
+                })
+                .catch(e => console.log(e))
         },
 
         regestration: () => {
@@ -138,13 +146,9 @@ const Index = () => {
     return (
         <AuthContext.Provider value={authFunctions}>
             <NavigationContainer>
-
                 {
                     loginState.userToken !== null ? <DrawerNavigation /> : <AuthStack />
                 }
-
-
-
             </NavigationContainer>
         </AuthContext.Provider>
     )
