@@ -4,10 +4,8 @@ import { AppContext } from './../Context/AppContext';
 import { AuthContext } from './../Context/AuthContext';
 
 const UserPorfile = ({ navigation }) => {
-    // const { setUserLogInInfo } = useContext(AppContext)
+    const { userLogInInfo } = useContext(AppContext)
     const { logout } = useContext(AuthContext)
-
-    const { setLoggedInUser, userLogInInfo, } = useContext(AppContext)
 
     // const logoutUser = () => {
     //     setLoggedInUser(false)
@@ -21,11 +19,11 @@ const UserPorfile = ({ navigation }) => {
                 translucent={true}
             />
             <View style={styles.details}>
-                {userLogInInfo ? <View>
-                    <Text>Email: {userLogInInfo.email}</Text>
-                    <Text>Name: {userLogInInfo.fullName}</Text>
-                    <Text>Phone: {userLogInInfo.phone}</Text>
-                </View> : null}
+                <View>
+                    <Text>Email: {userLogInInfo.data.email}</Text>
+                    <Text>Name: {userLogInInfo.data.fullName}</Text>
+                    <Text>Phone: {userLogInInfo.data.phone}</Text>
+                </View>
                 <TouchableOpacity onPress={() => logout()} style={styles.logoutBtn}>
                     <Text style={styles.logoutBtnText}>
                         Logout

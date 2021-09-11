@@ -63,3 +63,8 @@
 > Chnagelog: V-0.1.3:
 
 - Authentication can be done from database.
+
+> Chnagelog: V-0.1.4:
+
+- sub Catagory can be add.
+- Sub catagory update base builded.

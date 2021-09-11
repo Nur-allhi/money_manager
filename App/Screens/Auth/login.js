@@ -1,15 +1,14 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AppContext } from '../../Context/AppContext';
 import { AuthContext } from './../../Context/AuthContext';
 
 
 const login = () => {
-    const { setUserLogInInfo } = useContext(AppContext)
+    const { loadingScreen, wrongLoginInfo, setWrongLoginInfo, } = useContext(AppContext)
     const { regestration, login } = useContext(AuthContext)
 
-    const [checkAuthDetails, setCheckAuthDetails] = useState(false)
     const [newUser, setNewUser] = useState(false)
     const [passwordDidMatch, setPasswordDidMatch] = useState(true)
 
@@ -29,18 +28,6 @@ const login = () => {
         login(email, password);
     }
 
-    // const oldUserLogin = async () => {
-    //     const userData = new FormData();
-    //     userData.append('email', oldUserInput.email);
-    //     userData.append('passwodText', oldUserInput.password);
-
-    //     axios.post("https://myaccount.accountingarif.com/api/v1/user/login", userData)
-    //         .then(res => {
-    //             // setUserLogInInfo(res.data)
-    //             console.log("Login infos :", res.data)
-    //         })
-    //         .catch(error => console.log("Error: ", error))
-    // }
 
     const newUserLogin = () => {
         const newUserData = new FormData();
@@ -57,6 +44,13 @@ const login = () => {
             .catch(error => console.log("Error:", error))
     }
 
+    if (loadingScreen) {
+        return (
+            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <ActivityIndicator size="large" color="grey" />
+            </View>
+        )
+    }
 
 
     return (
@@ -130,7 +124,9 @@ const login = () => {
 
                         />
                         {
-                            checkAuthDetails ? <Text style={{ textAlign: "center" }}>Email and password {"\n"} is incorrect. Please try again</Text> : null
+                            wrongLoginInfo ? <Text style={{ textAlign: "center"  }}>
+                                Email and password {"\n"} is incorrect. Please try again !
+                            </Text> : null
                         }
                         <TouchableOpacity style={styles.loginBtn}
                             onPress={() => { handleLogin(oldUserInput.email, oldUserInput.password) }}>

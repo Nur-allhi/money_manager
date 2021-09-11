@@ -1,59 +1,42 @@
-useEffect(() => {
-    saveUserToken(loggedInUser)
-}, [loggedInUser])
-
-useEffect(() => {
-    saveUserInfo(userLogInInfo)
-}, [userLogInInfo])
-
-useEffect(() => {
-    getUserToken()
-    getUserInfo()
-}, [])
-
-
-const saveUserToken = async (token) => {
-    try {
-        const userLogin = JSON.stringify(token)
-        if (userLogin != null) {
-            await AsyncStorage.setItem("IsUserlogin", userLogin)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-const saveUserInfo = async (info) => {
-    try {
-        const userInfo = JSON.stringify(info)
-        if (userInfo != null) {
-            await AsyncStorage.setItem("User-Log-IN-Info", userInfo)
-            console.log("Data Saved")
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-
-const getUserToken = async () => {
-    try {
-        const userLogin = await AsyncStorage.getItem("IsUserlogin")
-        if (userLogin != null) {
-            setLoggedInUser(JSON.parse(userLogin))
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
-const getUserInfo = async () => {
-    try {
-        const userinfo = await AsyncStorage.getItem("User-Log-IN-Info")
-        if (userinfo != null) {
-            setUserLogInInfo(JSON.parse(userinfo))
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
+<DropDownPicker
+                            placeholderStyle={{
+                                color: "#5C527F",
+                                fontWeight: "bold"
+                            }}
+                            textStyle={{
+                                fontSize: 18
+                            }}
+                            labelStyle={{
+                                fontWeight: "bold"
+                            }}
+                            style={{
+                                borderColor: "#DDDDDD",
+                                borderWidth: 2,
+                            }}
+                            dropDownContainerStyle={{
+                                zIndex: 1000,
+                                elevation: 1000,
+                                marginTop: 5,
+                                paddingHorizontal: 10,
+                                paddingVertical: 10,
+                                borderWidth: 3,
+                                borderRadius: 20,
+                                borderColor: "#DDDDDD",
+                            }}
+                            selectedItemContainerStyle={{
+                                backgroundColor: "#79B4B7",
+                                borderRadius: 10,
+                                height: 50,
+                            }}
+                            listMode="SCROLLVIEW"
+                            // maxHeight={600}
+                            // showTickIcon={true}
+                            closeAfterSelecting={true}
+                            placeholder="Select catagory"
+                            open={dropDownOpen}
+                            setOpen={setDropDownOpen}
+                            value={selectedCatagory}
+                            setValue={setSelectedCatagory}
+                            items={parentCatagory}
+                            setItems={setParentCatagory}
+                        />
