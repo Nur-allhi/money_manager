@@ -1,18 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect } from 'react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
-import Colors from '../Config/Colors';
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AppContext } from './../Context/AppContext';
 
 
-export default function HomeScreen() {
-    const {setParentCatagory} = useContext(AppContext)
+export default function HomeScreen({ navigation }) {
+    const { setParentCatagory } = useContext(AppContext)
 
     useEffect(() => {
         getMainCatagoriesFromDevice()
     }, [])
 
-    
+
 
     const getMainCatagoriesFromDevice = async () => {
         try {
@@ -33,14 +33,39 @@ export default function HomeScreen() {
                 backgroundColor="#fff"
                 translucent={true}
             />
-            <View style={styles.cashSection}>
+            <View style={{
+                position: "absolute",
+                left: 10,
+                top: 20,
+            }}>
+                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+                    <Image
+                        style={{
+                            height: 30,
+                            width: 30,
+                        }}
+                        source={require("../assets/icons/menu.png")}
+                    />
+                </TouchableOpacity>
+            </View>
+
+            <Text style={{
+                fontSize: 20,
+                textAlign: "center",
+
+            }}>
+                Toggle The drawer
+            </Text>
+
+
+            {/* <View style={styles.cashSection}>
                 <Text style={styles.cashAmount}>
                     $ 1350
                 </Text>
                 <Text style={styles.cashTitle}>
                     Cash Available
                 </Text>
-            </View>
+            </View> */}
         </View>
     )
 }
@@ -55,17 +80,17 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
         justifyContent: "center",
-        backgroundColor: "#6B7AA1",
+        // backgroundColor: "#6B7AA1",
         borderRadius: 10,
     },
     cashTitle: {
         textAlign: "center",
-        color: Colors.cashTitle,
+        color: "black",
         fontSize: 16,
     },
     cashAmount: {
         textAlign: "center",
-        color: Colors.cashAmount,
+        color: "black",
         fontSize: 35,
     },
 })

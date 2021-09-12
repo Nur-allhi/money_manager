@@ -2,11 +2,12 @@ import CheckBox from '@react-native-community/checkbox';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { commonStyle } from './../Config/DefaultCodes';
 import { AppContext } from './../Context/AppContext';
 import ModalForUser from './modal';
 
-const UpdateSubCatagories = () => {
+const UpdateSubCatagories = ({navigation}) => {
     const { parentCatagoryData, setModal } = useContext(AppContext)
     const [subCatagories, setSubCatagories] = useState('')
     const [loading, setLoading] = useState(false)
@@ -25,6 +26,17 @@ const UpdateSubCatagories = () => {
         }
     }, [selectedCatagory])
 
+
+    // {
+    //     id: seletedSubCatagory,
+    //     name: textInput.name,
+    //     icon: null,
+    //     isParent: false,
+    //     parentId: selectedCatagory,
+    //     isCash: false,
+    //     isActive: toggleCheckBox
+    // }
+
     const updateCatagory = () => {
 
         const name = textInput.name
@@ -34,25 +46,26 @@ const UpdateSubCatagories = () => {
             Alert.alert("No name", "Please write a name")
         } else {
             setLoading(true)
-            const dataToSent = new FormData()
-            dataToSent.append("id", seletedSubCatagory)
-            dataToSent.append("name", textInput.name)
+            const dataToSent = new FormData();
+            dataToSent.append("id", seletedSubCatagory);
+            dataToSent.append("name", textInput.name);
             dataToSent.append("icon", null)
-            dataToSent.append("isParent", false)
-            dataToSent.append("parentId", selectedCatagory)
-            dataToSent.append("isCash", false)
-            dataToSent.append("isActive", toggleCheckBox)
-            console.log(dataToSent)
-            axios.put("https://myaccount.accountingarif.com/api/v1/account/update", dataToSent)
+            dataToSent.append("isParent", false);
+            dataToSent.append("parentId", selectedCatagory);
+            dataToSent.append("isCash", false);
+            dataToSent.append("isActive", toggleCheckBox);
+            console.log(dataToSent);
+            axios.post("https://myaccount.accountingarif.com/api/v1/account/update", dataToSent)
                 .then(res => {
                     console.log("server Res :", res.data)
+                    console.log("res has reached.")
                     if (res.data.success == true) {
                         setModal(true)
                     }
                 })
                 .catch(error => console.log("Server Errr :", error))
         }
-        console.log("tip dise")
+        console.log("Cliked")
     }
     useEffect(() => {
         setTimeout(() => {
@@ -68,7 +81,22 @@ const UpdateSubCatagories = () => {
         )
     }
     return (
-        <View style={styles.container}>
+        <View style={commonStyle.container}>
+             <View style={{
+                position: "absolute",
+                left: 10,
+                top: 20,
+            }}>
+                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+                    <Image
+                        style={{
+                            height: 30,
+                            width: 30,
+                        }}
+                        source={require("../assets/icons/menu.png")}
+                    />
+                </TouchableOpacity>
+            </View>
             <ModalForUser>
                 <View>
                     <TouchableOpacity onPress={() => setModal(false)} style={{
@@ -209,10 +237,10 @@ export default UpdateSubCatagories
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight,
-    },
+    // container: {
+    //     flex: 1,
+    //     marginTop: StatusBar.currentHeight,
+    // },
     addSubCatagories: {
         // marginHorizontal: 10,
         padding: 10,

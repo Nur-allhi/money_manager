@@ -1,6 +1,10 @@
-import { StatusBar } from 'react-native'
+import { StatusBar, StyleSheet } from 'react-native'
 
-export default{
-    marginTopForContainer: StatusBar.currentHeight,
-}
 
+
+export const commonStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+    }
+})

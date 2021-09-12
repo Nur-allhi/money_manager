@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "money_manager",
+    "name": "Acount Manager",
     "slug": "money_manager",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,13 +13,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "codetheproblem.accountmanager",
       "adaptiveIcon": {
         "foregroundImage": "./App/assets/Default/logo-icon.png",
         "backgroundColor": "#FFFFFF"

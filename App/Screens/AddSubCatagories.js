@@ -2,11 +2,12 @@ import CheckBox from '@react-native-community/checkbox';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { Alert, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { AppContext } from './../Context/AppContext';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { AppContext } from '../Context/AppContext';
+import { commonStyle } from './../Config/DefaultCodes';
 import ModalForUser from './modal';
 
-const AddCatagories = () => {
+const AddSubCatagories = ({navigation}) => {
     const { parentCatagory, setParentCatagory, parentCatagoryData, modal, setModal } = useContext(AppContext)
     const [textInput, setTextInput] = useState("")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
@@ -15,7 +16,7 @@ const AddCatagories = () => {
 
     const [selectedCatagory, setSelectedCatagory] = useState();
 
-    // console.log(parentCatagoryData)
+
 
     const newSubCatagory = () => {
         const name = textInput.name
@@ -33,9 +34,11 @@ const AddCatagories = () => {
             dataToSent.append("icon", null)
             axios.post("https://myaccount.accountingarif.com/api/v1/account/insert", dataToSent)
                 .then(res => {
-                    console.log("server Res :", res.data)
                     if (res.data.success == true) {
-                        setModal(true)
+                        setModal(true);
+                        selectedCatagory();
+                        toggleCheckBox(false);
+                        textInput("")
                     }
                 })
                 .catch(error => console.log("Server Errr :", error))
@@ -43,7 +46,22 @@ const AddCatagories = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={commonStyle.container}>
+             <View style={{
+                position: "absolute",
+                left: 10,
+                top: 20,
+            }}>
+                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+                    <Image
+                        style={{
+                            height: 30,
+                            width: 30,
+                        }}
+                        source={require("../assets/icons/menu.png")}
+                    />
+                </TouchableOpacity>
+            </View>
             <ModalForUser>
                 <View>
                     <TouchableOpacity onPress={() => setModal(false)} style={{
@@ -129,13 +147,13 @@ const AddCatagories = () => {
     )
 }
 
-export default AddCatagories;
+export default AddSubCatagories;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight,
-    },
+    // container: {
+    //     flex: 1,
+    //     marginTop: StatusBar.currentHeight,
+    // },
     addSubCatagories: {
         // marginHorizontal: 10,
         padding: 10,
