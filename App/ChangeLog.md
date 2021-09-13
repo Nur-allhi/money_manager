@@ -71,5 +71,10 @@
 
 > Chnagelog: V-0.1.5:
 
-- Sub catagori can be updted.
+- Sub catagory can be updted.
 - Drawer toggle has been added.
+
+> Chnagelog: V-0.1.6:
+
+- sub catagory update page redesigned.
+- dropdown package has changed to old one.

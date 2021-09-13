@@ -13,7 +13,6 @@ export default function HomeScreen({ navigation }) {
     }, [])
 
 
-
     const getMainCatagoriesFromDevice = async () => {
         try {
             const mainCatagories = await AsyncStorage.getItem("mainCatagories")

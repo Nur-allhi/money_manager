@@ -26,17 +26,7 @@ const UpdateSubCatagories = ({navigation}) => {
         }
     }, [selectedCatagory])
 
-
-    // {
-    //     id: seletedSubCatagory,
-    //     name: textInput.name,
-    //     icon: null,
-    //     isParent: false,
-    //     parentId: selectedCatagory,
-    //     isCash: false,
-    //     isActive: toggleCheckBox
-    // }
-
+    
     const updateCatagory = () => {
 
         const name = textInput.name
@@ -143,7 +133,7 @@ const UpdateSubCatagories = ({navigation}) => {
                             onValueChange={(itemValue, itemIndex) =>
                                 setSelectedCatagory(itemValue)
                             }>
-                            <Picker.Item label='Please select an catagory' value={null} />
+                            <Picker.Item label='Please select catagory' value={null} />
                             {
                                 parentCatagoryData.map(data => {
                                     return <Picker.Item
@@ -247,6 +237,7 @@ const styles = StyleSheet.create({
         width: "80%",
     },
     textInput: {
+        width:"80%",
         height: 60,
         marginBottom: 10,
         paddingLeft: 10,
