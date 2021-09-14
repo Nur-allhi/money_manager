@@ -78,3 +78,9 @@
 
 - sub catagory update page redesigned.
 - dropdown package has changed to old one.
+
+> Chnagelog: V-0.1.7:
+
+- Sub catagory can be updated.
+- Add catagory redesigned.
+- back button added.

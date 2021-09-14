@@ -1,33 +1,33 @@
 import CheckBox from '@react-native-community/checkbox';
-import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { AppContext } from '../Context/AppContext';
 import { commonStyle } from './../Config/DefaultCodes';
-import ModalForUser from './modal';
+import SuccessModal from './SuccessModal';
+import ToggleDrawer from './ToggleDrawer';
 
-const AddSubCatagories = ({navigation}) => {
-    const { parentCatagory, setParentCatagory, parentCatagoryData, modal, setModal } = useContext(AppContext)
+const AddSubCatagories = ({ navigation }) => {
+    const { parentCatagory, setParentCatagory, setSuccessModal } = useContext(AppContext)
+
     const [textInput, setTextInput] = useState("")
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
-
     const [dropDownOpen, setDropDownOpen] = useState(false);
-
-    const [selectedCatagory, setSelectedCatagory] = useState();
+    const [selectedMainCatagory, setSelectedMainCatagory] = useState();
 
 
 
     const newSubCatagory = () => {
         const name = textInput.name
-        if (selectedCatagory == undefined) {
+        if (selectedMainCatagory == undefined) {
             Alert.alert("Catagory Null", "Please select Catagory")
         } else if (name == "") {
             Alert.alert("No name", "Please write a name")
         } else {
             const dataToSent = new FormData()
             dataToSent.append("name", textInput.name)
-            dataToSent.append("parentId", selectedCatagory)
+            dataToSent.append("parentId", selectedMainCatagory)
             dataToSent.append("isParent", false)
             dataToSent.append("isActive", toggleCheckBox)
             dataToSent.append("isCash", false)
@@ -35,10 +35,10 @@ const AddSubCatagories = ({navigation}) => {
             axios.post("https://myaccount.accountingarif.com/api/v1/account/insert", dataToSent)
                 .then(res => {
                     if (res.data.success == true) {
-                        setModal(true);
-                        selectedCatagory();
-                        toggleCheckBox(false);
-                        textInput("")
+                        setSuccessModal(true);
+                        setSelectedMainCatagory();
+                        setToggleCheckBox(false);
+                        setTextInput("")
                     }
                 })
                 .catch(error => console.log("Server Errr :", error))
@@ -47,100 +47,93 @@ const AddSubCatagories = ({navigation}) => {
 
     return (
         <View style={commonStyle.container}>
-             <View style={{
-                position: "absolute",
-                left: 10,
-                top: 20,
-            }}>
-                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-                    <Image
-                        style={{
-                            height: 30,
-                            width: 30,
-                        }}
-                        source={require("../assets/icons/menu.png")}
-                    />
-                </TouchableOpacity>
-            </View>
-            <ModalForUser>
+            <StatusBar
+                barStyle="dark-content"
+                backgroundColor="#fff"
+                translucent={true}
+            />
+            <ToggleDrawer
+                navigation={navigation}
+            />
+            <SuccessModal />
+            <View style={commonStyle.formContainer}>
                 <View>
-                    <TouchableOpacity onPress={() => setModal(false)} style={{
-                        width: '100%',
-                        height: 20,
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                    }}>
-                        <Image
-                            style={{
-                                width: 30,
-                                height: 30,
-                            }}
-                            source={require("../assets/icons/modal/x.png")} />
-                    </TouchableOpacity>
-                    <Image
-                        style={{
-                            height: 150,
-                            width: 150,
-                        }}
-                        source={require("../assets/icons/modal/checked.png")} />
-                </View>
-            </ModalForUser>
-            <View style={{ alignItems: "center", marginVertical: 20, }}>
-                <Text style={{ fontSize: 25, }}>Create sub catagory</Text>
-                <View style={styles.addSubCatagories}>
-                    <View>
-                        <Text style={{ fontSize: 18, marginLeft: 5, }}>Select main catagory</Text>
-                        <Picker
-                            style={{
-                                height: 40,
-                                marginTop: 10,
-                                marginBottom: 10,
-                            }}
-                            dropdownIconColor="#5C527F"
-                            mode="dropdown"
-                            selectedValue={selectedCatagory}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setSelectedCatagory(itemValue)
-                            }>
-                            <Picker.Item label='Please select an catagory' value='0' />
-                            {
-                                parentCatagoryData.map(data => {
-                                    return <Picker.Item
-                                        key={data.id}
-                                        label={data.name}
-                                        value={data.id}
-                                        enabled={true}
-                                        style={{
-                                            color: "#5C527F",
-                                            fontSize: 22,
-                                        }} />
-                                })
-                            }
-                        </Picker>
+                    <View style={commonStyle.formWrapper}>
+                        <View >
+                            <Text style={commonStyle.pageTitle}>Create sub catagory</Text>
+                        </View>
+                        <View style={{ alignItems: "center" }}>
+                            <View style={[commonStyle.dropDownContainer,
+                            dropDownOpen ? { minHeight: 260 } : null]}>
+                                <DropDownPicker
+                                    placeholderStyle={{
+                                        color: "#5C527F",
+                                        fontWeight: "bold"
+                                    }}
+                                    textStyle={{
+                                        fontSize: 18
+                                    }}
+                                    labelStyle={{
+                                        fontWeight: "bold"
+                                    }}
+                                    style={{
+                                        borderColor: "#DDDDDD",
+                                        borderWidth: 2,
+                                    }}
+                                    dropDownContainerStyle={{
+                                        zIndex: 1000,
+                                        elevation: 1000,
+                                        marginTop: 5,
+                                        paddingHorizontal: 10,
+                                        paddingVertical: 10,
+                                        borderWidth: 3,
+                                        borderRadius: 20,
+                                        borderColor: "#DDDDDD",
+                                    }}
+                                    selectedItemContainerStyle={{
+                                        backgroundColor: "#79B4B7",
+                                        borderRadius: 10,
+                                        height: 50,
+                                    }}
+                                    placeholder="Select catagory"
+
+
+
+                                    open={dropDownOpen}
+                                    setOpen={setDropDownOpen}
+                                    items={parentCatagory}
+                                    setItems={setParentCatagory}
+                                    value={selectedMainCatagory}
+                                    setValue={setSelectedMainCatagory}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ marginTop: 10, alignItems: "center" }}>
+                            <TextInput
+                                style={commonStyle.textInput}
+                                placeholder="Sub catagory name"
+                                value={textInput.name}
+                                onChangeText={text => setTextInput({ ...textInput, name: text })}
+                            />
+
+                            <View style={commonStyle.checkBox}>
+                                <CheckBox
+                                    disabled={false}
+                                    tintColors={{ true: '#F54748', false: 'black' }}
+                                    value={toggleCheckBox}
+                                    onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                />
+                                <Text style={{ fontSize: 16 }}>Active this sub catagory</Text>
+                            </View>
+
+                            <TouchableOpacity style={[commonStyle.submitORsaveBtn, { width: "80%" }]}
+                                onPress={() => newSubCatagory()}>
+                                <Text style={{ color: "#fff", fontSize: 18 }}>
+                                    Save
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="Sub catagory name"
-                        value={textInput.name}
-                        onChangeText={text => setTextInput({ ...textInput, name: text })}
-                    />
-
-                    <View style={styles.checkBox}>
-                        <CheckBox
-                            disabled={false}
-                            tintColors={{ true: '#F54748', false: 'black' }}
-                            value={toggleCheckBox}
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                        />
-                        <Text style={{ fontSize: 16 }}>Active this sub catagory</Text>
-                    </View>
-
-                    <TouchableOpacity style={styles.submitBtn} onPress={() => newSubCatagory()}>
-                        <Text style={{ color: "#fff", fontSize: 18 }}>
-                            Save
-                        </Text>
-                    </TouchableOpacity>
-
                 </View>
             </View>
         </View>
@@ -148,39 +141,3 @@ const AddSubCatagories = ({navigation}) => {
 }
 
 export default AddSubCatagories;
-
-const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     marginTop: StatusBar.currentHeight,
-    // },
-    addSubCatagories: {
-        // marginHorizontal: 10,
-        padding: 10,
-        width: "80%",
-    },
-    textInput: {
-        height: 60,
-        marginBottom: 10,
-        paddingLeft: 10,
-        fontSize: 18,
-        borderWidth: 2,
-        borderColor: "#DDDDDD",
-        borderRadius: 10,
-        backgroundColor: "#fff",
-    },
-    checkBox: {
-        flexDirection: "row",
-        alignItems: "center",
-        fontSize: 20,
-        marginTop: 10,
-    },
-    submitBtn: {
-        alignItems: "center",
-        justifyContent: "center",
-        height: 40,
-        marginTop: 10,
-        borderRadius: 10,
-        backgroundColor: "#FF6B6B",
-    },
-})

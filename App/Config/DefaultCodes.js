@@ -7,6 +7,12 @@ export const commonStyle = StyleSheet.create({
         flex: 1,
         marginTop: StatusBar.currentHeight,
     },
+    formContainer: {
+        paddingHorizontal: 10,
+    },
+    formWrapper: {
+        marginTop: 10,
+    },
     pageTitle: {
         fontSize: 25,
         textAlign: "center",
@@ -27,6 +33,12 @@ export const commonStyle = StyleSheet.create({
         borderColor: "#DDDDDD",
         borderRadius: 10,
         backgroundColor: "#fff",
+    },
+
+    // CheckBox:
+    checkBox: {
+        flexDirection: "row",
+        alignItems: "center",
     },
 
     // Button:

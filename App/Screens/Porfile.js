@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { AppContext } from './../Context/AppContext';
-import { AuthContext } from './../Context/AuthContext';
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppContext } from '../Context/AppContext';
+import { AuthContext } from '../Context/AuthContext';
+import ToggleDrawer from './ToggleDrawer';
 
-const UserPorfile = ({ navigation }) => {
+const Porfile = ({ navigation }) => {
     const { userLogInInfo } = useContext(AppContext)
     const { logout } = useContext(AuthContext)
 
@@ -18,21 +19,9 @@ const UserPorfile = ({ navigation }) => {
                 backgroundColor="#fff"
                 translucent={true}
             />
-             <View style={{
-                position: "absolute",
-                left: 10,
-                top: 20,
-            }}>
-                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-                    <Image
-                        style={{
-                            height: 30,
-                            width: 30,
-                        }}
-                        source={require("../assets/icons/menu.png")}
-                    />
-                </TouchableOpacity>
-            </View>
+             <ToggleDrawer
+                navigation={navigation}
+            />
             <View style={styles.details}>
                 <View>
                     <Text>Email: {userLogInInfo.data.email}</Text>
@@ -50,7 +39,7 @@ const UserPorfile = ({ navigation }) => {
     )
 }
 
-export default UserPorfile
+export default Porfile
 
 const styles = StyleSheet.create({
     conatiner: {

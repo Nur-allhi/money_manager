@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect } from 'react';
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { AppContext } from './../Context/AppContext';
+import ToggleDrawer from './ToggleDrawer';
 
 
 export default function HomeScreen({ navigation }) {
@@ -32,22 +32,9 @@ export default function HomeScreen({ navigation }) {
                 backgroundColor="#fff"
                 translucent={true}
             />
-            <View style={{
-                position: "absolute",
-                left: 10,
-                top: 20,
-            }}>
-                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-                    <Image
-                        style={{
-                            height: 30,
-                            width: 30,
-                        }}
-                        source={require("../assets/icons/menu.png")}
-                    />
-                </TouchableOpacity>
-            </View>
-
+             <ToggleDrawer
+                navigation={navigation}
+            />
             <Text style={{
                 fontSize: 20,
                 textAlign: "center",
@@ -79,7 +66,6 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
         justifyContent: "center",
-        // backgroundColor: "#6B7AA1",
         borderRadius: 10,
     },
     cashTitle: {

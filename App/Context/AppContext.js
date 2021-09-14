@@ -16,7 +16,7 @@ const AppContextProvider = ({ children }) => {
 
 
     const [modal, setModal] = useState(false)
-
+    const [successModal, setSuccessModal] = useState(false)
     return (
         <>
             <AppContext.Provider value={{
@@ -26,7 +26,8 @@ const AppContextProvider = ({ children }) => {
                 parentCatagory, setParentCatagory,
                 loadingScreen, setLoadingScreen,
                 wrongLoginInfo, setWrongLoginInfo,
-                modal, setModal
+                modal, setModal,
+                successModal, setSuccessModal
             }}>
                 {children}
             </AppContext.Provider>
