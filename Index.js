@@ -16,14 +16,16 @@ const Index = () => {
         userLogInInfo, setUserLogInInfo
     } = useContext(AppContext)
 
-
+    useEffect(() => {
+        getMainCatagoriesFromDevice()
+    }, [])
 
     const initialLoginState = {
         isLoading: true,
         userToken: null,
     };
 
-   const loginReducer = (prevState, action) => {
+    const loginReducer = (prevState, action) => {
         switch (action.type) {
             case 'RETRIVE_TOKEN':
                 return {
@@ -98,7 +100,9 @@ const Index = () => {
 
     useEffect(() => {
         axios.get("https://myaccount.accountingarif.com/api/v1/account/parent-without-cash")
-            .then(res => setParentCatagoryData(res.data.data))
+            .then(res => {
+                setParentCatagoryData(res.data.data)
+            })
             .catch(error => console.log(error))
     }, [])
 
@@ -112,13 +116,25 @@ const Index = () => {
         if (parentCatagory.length > 0) {
             saveMainCatagoriesToDevice(parentCatagory)
         }
-    }, [])
+    }, [parentCatagoryData])
 
     const saveMainCatagoriesToDevice = async (parentCatagory) => {
         try {
             const mainCatagories = JSON.stringify(parentCatagory)
             if (mainCatagories != null) {
                 await AsyncStorage.setItem("mainCatagories", mainCatagories)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getMainCatagoriesFromDevice = async () => {
+        try {
+            const mainCatagories = await AsyncStorage.getItem("mainCatagories")
+            if (mainCatagories != null) {
+                setParentCatagory(JSON.parse(mainCatagories))
+
             }
         } catch (error) {
             console.log(error)

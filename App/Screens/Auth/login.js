@@ -78,6 +78,7 @@ const login = () => {
                             onChangeText={text => setNewUserInput({ ...newUserInput, email: text })}
                             placeholder="New email"
                             value={newUserInput.email}
+                            keyboardType="email-address"
                         />
                         <TextInput
                             secureTextEntry={true}
@@ -113,11 +114,13 @@ const login = () => {
                             placeholder="Your email"
                             onChangeText={text => setOldUserInput({ ...oldUserInput, email: text })}
                             value={oldUserInput.email}
-
+                            keyboardType="email-address"
                         />
                         <TextInput
                             style={styles.inputs}
                             placeholder="Your Password"
+                            secureTextEntry={true}
+
                             onChangeText={text => setOldUserInput({ ...oldUserInput, password: text })}
                             value={oldUserInput.password}
 

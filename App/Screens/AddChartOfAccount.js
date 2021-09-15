@@ -3,12 +3,12 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { Alert, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { commonStyle } from '../Config/DefaultCodes';
 import { AppContext } from '../Context/AppContext';
-import { commonStyle } from './../Config/DefaultCodes';
 import SuccessModal from './SuccessModal';
 import ToggleDrawer from './ToggleDrawer';
 
-const AddSubCatagories = ({ navigation }) => {
+const AddChartOfAccount = ({ navigation }) => {
     const { parentCatagory, setParentCatagory, setSuccessModal } = useContext(AppContext)
 
     const [textInput, setTextInput] = useState("")
@@ -96,9 +96,6 @@ const AddSubCatagories = ({ navigation }) => {
                                         height: 50,
                                     }}
                                     placeholder="Select catagory"
-
-
-
                                     open={dropDownOpen}
                                     setOpen={setDropDownOpen}
                                     items={parentCatagory}
@@ -140,4 +137,4 @@ const AddSubCatagories = ({ navigation }) => {
     )
 }
 
-export default AddSubCatagories;
+export default AddChartOfAccount;

@@ -84,3 +84,9 @@
 - Sub catagory can be updated.
 - Add catagory redesigned.
 - back button added.
+
+> Chnagelog: V-0.1.8:
+
+- List page design changes, and made conditional.
+- email keyboard fixed
+- password is not seenable.

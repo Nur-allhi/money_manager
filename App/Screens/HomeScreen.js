@@ -1,29 +1,27 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
-import { AppContext } from './../Context/AppContext';
 import ToggleDrawer from './ToggleDrawer';
 
 
 export default function HomeScreen({ navigation }) {
-    const { setParentCatagory } = useContext(AppContext)
+    // const { setParentCatagory } = useContext(AppContext)
 
-    useEffect(() => {
-        getMainCatagoriesFromDevice()
-    }, [])
+    // useEffect(() => {
+    //     getMainCatagoriesFromDevice()
+    // }, [])
 
 
-    const getMainCatagoriesFromDevice = async () => {
-        try {
-            const mainCatagories = await AsyncStorage.getItem("mainCatagories")
-            if (mainCatagories != null) {
-                setParentCatagory(JSON.parse(mainCatagories))
+    // const getMainCatagoriesFromDevice = async () => {
+    //     try {
+    //         const mainCatagories = await AsyncStorage.getItem("mainCatagories")
+    //         if (mainCatagories != null) {
+    //             setParentCatagory(JSON.parse(mainCatagories))
 
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     return (
         <View style={styles.container}>
