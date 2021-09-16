@@ -6,11 +6,14 @@ const ToggleDrawer = ({ navigation }) => {
     const routeName = useRoute()
     return (
         <View style={{
-            marginTop: 10,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginHorizontal: 10,
+            backgroundColor: "#79B4B7",
+            paddingHorizontal: 15,
+            marginHorizontal: 5,
+            paddingVertical: 10,
+            borderRadius: 5,
         }}>
             <View>
                 {routeName.name == "Home" ? null :

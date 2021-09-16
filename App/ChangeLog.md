@@ -90,3 +90,9 @@
 - List page design changes, and made conditional.
 - email keyboard fixed
 - password is not seenable.
+
+> Chnagelog: V-0.1.9:
+
+- List is now scrolable
+- Drawer design changed.
+- profile page redesigned.

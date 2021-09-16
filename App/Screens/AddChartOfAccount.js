@@ -120,7 +120,7 @@ const AddChartOfAccount = ({ navigation }) => {
                                     value={toggleCheckBox}
                                     onValueChange={(newValue) => setToggleCheckBox(newValue)}
                                 />
-                                <Text style={{ fontSize: 16 }}>Active this sub catagory</Text>
+                                <Text style={{ fontSize: 16 }}>Active</Text>
                             </View>
 
                             <TouchableOpacity style={[commonStyle.submitORsaveBtn, { width: "80%" }]}
